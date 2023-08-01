@@ -1,0 +1,1 @@
+export const STATIIC_WORKBOOK_SIZE = 15;
