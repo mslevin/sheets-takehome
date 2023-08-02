@@ -5,7 +5,7 @@ interface HeaderState {
 };
 
 const initialState: HeaderState = {
-    title: 'Untitled Spreadsheet',
+    title: 'New Spreadsheet',
 }
 
 export const headerSlice = createSlice({

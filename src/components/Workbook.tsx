@@ -13,7 +13,7 @@ function Workbook() {
         return (
             cells.map((row, index) => {
                 return (
-                    <tr>
+                    <tr key={'row' + index}>
                         <StyledTh>{index + 1}</StyledTh>
                         {generateCells(row, index)}
                     </tr>
@@ -23,7 +23,7 @@ function Workbook() {
     }
 
     function generateCells(row: CellData[], rowIndex: number) {
-        return row.map((cell, cellIndex) => <Cell cellData={cell} rowIndex={rowIndex} cellIndex={cellIndex}/>)
+        return row.map((cell, cellIndex) => <Cell cellData={cell} rowIndex={rowIndex} cellIndex={cellIndex} key={rowIndex + ' ' + cellIndex}/>)
     }
 
     return (
@@ -31,7 +31,7 @@ function Workbook() {
             <tbody>
                 <tr>
                     <StyledTh></StyledTh>
-                    {columnTitles.map(title => (<StyledTh>{title}</StyledTh>))}
+                    {columnTitles.map(title => (<StyledTh key={title}>{title}</StyledTh>))}
                 </tr>
                 {generateRows(cells)}
             </tbody>

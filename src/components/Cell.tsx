@@ -4,21 +4,18 @@ import { updateCell } from "../store/workbook/workbookSlice";
 import { useRef, useState } from "react";
 import { CellData } from "../types";
 
-const Input = ({initialData, handleDataInput, handleClearInput,}: any) => {
+const Input = ({initialData, handleDataInput, handleClearInput, handleOutsideClick, inputRef}: any) => {
     const wrapperRef = useRef(null);
-    useDetectOutsideClick(wrapperRef, () => {
-        handleClearInput();
-    });
     const [ newData, setNewData ] = useState<string>(initialData);
 
-    const updateData = () => {
-        handleDataInput(newData);
-        setNewData('');
-    }
+    useDetectOutsideClick(wrapperRef, () => {
+        handleOutsideClick();
+    });
 
-    const handleKeyDown = (e: any) => {
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-            updateData();
+            handleDataInput(newData);
+            setNewData('');
         }
         else if (e.key === 'Escape') {
             handleClearInput();
@@ -27,22 +24,26 @@ const Input = ({initialData, handleDataInput, handleClearInput,}: any) => {
     }
 
     return (
-        <DataInput
-            autoFocus
-            key="dataInput"
-            onKeyDown={handleKeyDown}
-            onChange={(e) => {
-                setNewData(e.target.value)
-            }}
-            value={newData as string}
-            ref={wrapperRef}
-        />
+        <div ref={wrapperRef}>
+            <DataInput
+                autoFocus
+                id="dataInput"
+                key="dataInput"
+                onKeyDown={handleKeyDown}
+                onChange={(e) => {
+                    setNewData(e.target.value)
+                }}
+                value={newData as string}
+                ref={inputRef}
+            />
+        </div>
     )
 }
 
 function Cell({cellData, rowIndex, cellIndex} : { cellData: CellData, rowIndex: number, cellIndex: number}) {
     const dispatch = useAppDispatch();
     const [ editMode, setEditMode ] = useState(false);
+    const inputRef = useRef<HTMLInputElement | null>(null);
     
     function handleDataInput(data: string) {
         setEditMode(false);
@@ -57,35 +58,44 @@ function Cell({cellData, rowIndex, cellIndex} : { cellData: CellData, rowIndex: 
         setEditMode(false);
     }
 
+    function handleOutsideClick() {
+        if (inputRef.current && inputRef.current.value) {
+            handleDataInput(inputRef.current.value);
+        }
+        else {
+            handleDataInput('');
+        }
+        handleClearInput();
+    }
+
 
     if (editMode) {
         return (
-            <StyledTd><Input initialData={cellData.displayData} handleDataInput={handleDataInput} handleClearInput={handleClearInput}/></StyledTd>
+            <td>
+                <Input
+                    initialData={cellData.rawData}
+                    handleDataInput={handleDataInput}
+                    handleClearInput={handleClearInput}
+                    handleOutsideClick={handleOutsideClick}
+                    inputRef={inputRef}
+                />
+            </td>
         );
     }
     else {
         return (
-            <StyledTd
+            <td
                 onClick={() => {
                     setEditMode(true)
                 }}
             >
                 {cellData.displayData}
-            </StyledTd>
+            </td>
         );
     }
 }
 
 export default Cell;
-
-const StyledTd = styled.td`
-    min-width: 60px;
-    border: 1px solid black;
-    padding: 0px 3px 0px 3px;
-    user-select: none;
-    cursor: pointer;
-    position: relative;
-`;
 
 const DataInput = styled.input`
     z-index: 10;
