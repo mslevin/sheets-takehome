@@ -12,6 +12,11 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+
+  /* width: 100%; */
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
 }
 
 a {
@@ -27,7 +32,6 @@ body {
   margin: 0;
   display: flex;
   min-width: 320px;
-  min-height: 100vh;
 }
 
 input {
@@ -42,4 +46,5 @@ td {
   user-select: none;
   cursor: pointer;
   position: relative;
+  text-align: end;
 }

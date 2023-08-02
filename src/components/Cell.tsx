@@ -1,24 +1,33 @@
 import { styled } from "styled-components";
-import { useAppDispatch, useDetectOutsideClick } from "../hooks";
-import { updateCell } from "../store/workbook/workbookSlice";
-import { useRef, useState } from "react";
-import { CellData } from "../types";
+import { LegacyRef, useRef, useState } from "react";
 
-const Input = ({initialData, handleDataInput, handleClearInput, handleOutsideClick, inputRef}: any) => {
+import { useAppDispatch, useDetectOutsideClick } from "../helpers/hooks";
+import { updateCell } from "../store/workbook/workbookSlice";
+import { CellData } from "../helpers/types";
+
+interface InputProps {
+    initialData: string,
+    handleDataInput: (input: string) => void;
+    handleClearInput: () => void;
+    handleOutsideClick: () => void;
+    inputRef: LegacyRef<HTMLInputElement>;
+}
+
+const Input = (props: InputProps) => {
     const wrapperRef = useRef(null);
-    const [ newData, setNewData ] = useState<string>(initialData);
+    const [ newData, setNewData ] = useState<string>(props.initialData);
 
     useDetectOutsideClick(wrapperRef, () => {
-        handleOutsideClick();
+        props.handleOutsideClick();
     });
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-            handleDataInput(newData);
+            props.handleDataInput(newData);
             setNewData('');
         }
         else if (e.key === 'Escape') {
-            handleClearInput();
+            props.handleClearInput();
             setNewData('');
         }
     }
@@ -34,7 +43,7 @@ const Input = ({initialData, handleDataInput, handleClearInput, handleOutsideCli
                     setNewData(e.target.value)
                 }}
                 value={newData as string}
-                ref={inputRef}
+                ref={props.inputRef}
             />
         </div>
     )

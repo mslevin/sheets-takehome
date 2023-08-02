@@ -1,13 +1,12 @@
 import { styled } from 'styled-components';
-import './App.css'
-import Header from './components/Header';
 import Workbook from './components/Workbook';
 
 function App() {
-
   return (
     <>
-      <Header/>
+      <HeaderContainer>
+          New Spreadsheet
+      </HeaderContainer>
       <Toolbar/>
       <Workbook/>
     </>
@@ -15,6 +14,11 @@ function App() {
 }
 
 export default App;
+
+const HeaderContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
 
 const Toolbar = styled.div`
   height: 3px;

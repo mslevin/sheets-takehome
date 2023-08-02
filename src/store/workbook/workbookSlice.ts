@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { CellData, WorkbookState } from "../../types";
+import { CellData, WorkbookState } from "../../helpers/types";
 import { createInitialCells, dataCoordToCellId, sheetToDataCoords } from "../../helpers/util";
-import { STATIIC_WORKBOOK_SIZE } from "../../constants";
+import { STATIIC_WORKBOOK_SIZE } from "../../helpers/constants";
 
 // Parse user cell input and return a fully formed CellData object
 function parseCellUpdate(state: WorkbookState, value: string): CellData {
@@ -56,15 +56,11 @@ function updateOtherCells(state: WorkbookState, updatedRow: number, updatedCol: 
     }
 }
 
-const initialState: WorkbookState = {
-    cellData: createInitialCells(),
-}
-
 export const workbookSlice = createSlice({
     name: 'workbook',
-    initialState,
+    initialState: {cellData: createInitialCells()},
     reducers: {
-        updateCell: (state, action: PayloadAction<{rowIndex: number, cellIndex: number, value: any}>) => {
+        updateCell: (state, action: PayloadAction<{rowIndex: number, cellIndex: number, value: string}>) => {
             state.cellData[action.payload.rowIndex][action.payload.cellIndex] = parseCellUpdate(state, action.payload.value);
             updateOtherCells(state, action.payload.rowIndex, action.payload.cellIndex);
         }

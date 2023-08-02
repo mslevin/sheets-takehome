@@ -1,15 +1,15 @@
 import { styled } from "styled-components";
-import { A_STRING_CODE, STATIIC_WORKBOOK_SIZE } from "../constants";
-import { useAppSelector } from "../hooks";
+import { A_STRING_CODE, STATIIC_WORKBOOK_SIZE } from "../helpers/constants";
+import { useAppSelector } from "../helpers/hooks";
 import Cell from "./Cell";
-import { CellData } from "../types";
+import { CellData } from "../helpers/types";
 
 function Workbook() {
     const cells = useAppSelector((state) => state.workbook.cellData);
     // generate an array of column titles: ['A', 'B', 'C', etc]
     const columnTitles = [...Array(STATIIC_WORKBOOK_SIZE).keys()].map(num => String.fromCharCode(A_STRING_CODE + num));
 
-    function generateRows(cells: any[]) {
+    function generateRows(cells: CellData[][]) {
         return (
             cells.map((row, index) => {
                 return (
