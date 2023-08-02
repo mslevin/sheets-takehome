@@ -13,6 +13,12 @@ npm run dev
 
 The vite dev server will start and display the application on localhost (mine runs on localhost:5173, yours may differ).
 
+Alternatively, you can run:
+```
+npm run build
+npm run preview
+```
+
 ### Features
 The application displays a 15x15 cell spreadsheet, the size of which is static. Each cell is user editable. Valid inputs are integers or formula strings, which can be used to sum any number of other cells. Inputs that are outside of thses input parameters will be ignored.
 
@@ -100,3 +106,18 @@ Descriptions:
 - [Cell](src/components/Cell.tsx) handles display and input logic.
 
 ### Future Work
+If given more time, and the spec's limitations were removed, the first things I would build would be:
+
+#### Support for more operations within formulas
+This would immediately make the application more useful, allowing the user to use other basic operands such as `-`, `*`, `/`, etc. The tempting, bad and dangerous, but quick method to do this would be to parse the formula and replace any operands with their parsed values, and then run an `eval()` on the resultant string. This is suboptimal, to say the least, because the use of `eval()` can leave the application open to malicious actors.
+
+A safer implementation would be to build a postfix stackbased calculator that parses the string and adds operands and operators to a stack, and calculates the result when the string is fully parsed. This could theoretically add support for more complex formulas, including the use of parens and order of operations. 
+
+#### Persisting sheet data
+I decided against building this to keep the application simple, but I would enjoy adding persistent data features to the application. The most straightforward way of doing this would be to essentially dump the global state to localStorage at some interval (or after edits, or on page close, etc). When the application is loaded next, the app would inspect localStorage for previously-saved sheet data and would initialize the sheet with that data.
+
+#### Display of cell referenced in formulas
+A fun feature to build would be to highlight the cells referenced bya formula when that cell is selected or as the user types. This could be achieved by parsing the input formula, storing the referenced cells in global state, and adding something like a `highlighted: true` field to the `CellData` object.
+
+#### Cell coloring/styling
+Adding additional fields to the `CellData` type would allow the application to have styling on a per-cell basis. This could include font styling or cell coloring.
