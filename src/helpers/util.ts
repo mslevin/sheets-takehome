@@ -17,7 +17,7 @@ export function createInitialCells(): CellData[][] {
 // Examples: A1 --> [0,0], D5 --> [4,3]
 // Letter refers to the COLUMN, number refers to the ROW
 export function sheetToDataCoords(cellId: string): number[] {
-    return [cellId[0].charCodeAt(0) - A_STRING_CODE, Number(cellId[1]) - 1];
+    return [cellId[0].charCodeAt(0) - A_STRING_CODE, Number(cellId.slice(1)) - 1];
 }
 
 // Given some input data coordinates, return the cellId
